@@ -12,13 +12,13 @@ RUN mv .mvn ~/.m2  # configure global maven settings.xml
 #       a working version of the 2020-1 validator.
 RUN mvn clean package -DskipTests
 
-RUN rm /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*-doc.jar
-RUN rm /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*-xprocdoc.jar
+RUN rm -f /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*-doc.jar
+RUN rm -f /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*-xprocdoc.jar
 
 # then use the build artifacts to create an image where the pipeline is installed
-FROM daisyorg/pipeline-assembly:v1.13.6
+FROM daisyorg/pipeline-assembly:latest
 LABEL maintainer="Norwegian library of talking books and braille (http://www.nlb.no/)"
-COPY --from=builder /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*.jar /opt/daisy-pipeline2/system/felix/
+COPY --from=builder /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*.jar /opt/daisy-pipeline2/system/common/
 ENV PIPELINE2_WS_LOCALFS=false \
     PIPELINE2_WS_AUTHENTICATION=false \
     PIPELINE2_WS_AUTHENTICATION_KEY=clientid \
